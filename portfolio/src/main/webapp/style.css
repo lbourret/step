@@ -1,19 +1,66 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+/* Default Page */
+
+/* The navbar container */
+.navi {
+    overflow: hidden;
+    background-color: aliceblue;
 }
 
-#greeting-container {
-  margin-top: 20px;
+/* Navbar links */
+#linkedin{
+    border-radius: 25%;
 }
 
-body {
-  background-color:  lightblue;
+.navi a {
+    float: right;
+    display: block;
+    color: steelblue;
+    padding:  20px 30px;
+    text-decoration: none;
+    line-height: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+/* Links - change color on hover */
+.navi a:hover {
+    background-color: snow;
+    color: black;
+}
+
+body.default{
+     background-color: slategray;
+}
+
+#profile {
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 70px;
 }
 
 .header {
-  background-color: #F1F1F1;
-  text-align: center;
-  padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+    letter-spacing: 5px;
+    font-size: 25px;
 }
+
+#bio {
+    text-align: center;
+    color: white;
+    letter-spacing: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#greeting-container {
+    margin-top: 20px;
+}
+
+
+/* Education Page */

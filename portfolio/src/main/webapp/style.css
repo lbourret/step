@@ -4,6 +4,7 @@
 .navi {
     overflow: hidden;
     background-color: aliceblue;
+    height: 70px;
 }
 
 /* Navbar links */
@@ -16,10 +17,11 @@
     display: block;
     color: steelblue;
     padding:  20px 30px;
-    text-decoration: none;
-    line-height: 20px;
-    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Links - change color on hover */
@@ -37,7 +39,7 @@ body.default{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 70px;
+    margin-top: 120px;
 }
 
 .header {
@@ -61,6 +63,9 @@ body.default{
 #greeting-container {
     margin-top: 20px;
 }
+
+
+/* Experience Page */
 
 
 /* Education Page */

@@ -17,7 +17,8 @@
  */
 function addRandomGreeting() {
   const greetings =
-      ['My favorite color is purple',  'I love french fries', 'I play soccer'];
+      ['My favorite color is purple',  'I love french fries', 'I play soccer', 'My favorite ice cream flavor is coffee',
+      'Connecticut born and raised', 'I have never watched Game of Thrones'];
 
   // Pick a random greeting.
   const greeting = greetings[Math.floor(Math.random() * greetings.length)];
@@ -27,5 +28,13 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
+function googleText(id) {
+    var content = document.getElementById("google");
+    content.classList.toggle('visible');
+}
 
+function pruText() {
+    var content = document.getElementById("pru");
+    content.classList.toggle('visible');
+}
 

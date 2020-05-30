@@ -1,4 +1,4 @@
-/* Default Page */
+/* All Pages */
 
 /* The navbar container */
 .navi {
@@ -20,19 +20,40 @@
     text-align: center;
     line-height: 30px;
     font-size: 20px;
+    letter-spacing: 5px;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Links - change color on hover */
+/* Hover color */
 .navi a:hover {
     background-color: snow;
     color: black;
 }
 
-body.default{
-     background-color: slategray;
+/* Hover color */
+.active {
+    background-color: snow;
+    color: black;
 }
+
+body{
+     background-color: slategrey;
+     color: white;
+     font-family: Arial, Helvetica, sans-serif;
+}
+
+.header {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+
+/* Default Page */
 
 #profile {
     border-radius: 50%;
@@ -42,30 +63,78 @@ body.default{
     margin-top: 120px;
 }
 
-.header {
+#default {
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+#h1default {
     margin-left: auto;
     margin-right: auto;
     width: 650px;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-    letter-spacing: 5px;
-    font-size: 25px;
+    font-size: 50px;
 }
 
-#bio {
-    text-align: center;
-    color: white;
-    letter-spacing: 5px;
-    font-family: Arial, Helvetica, sans-serif;
+#funButton {
+  background-color: aliceblue;
+  border: none;
+  color: steelblue;
+  padding: 15px 30px;
+  margin-top: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
 }
 
 #greeting-container {
     margin-top: 20px;
 }
 
-
 /* Experience Page */
+#experience{
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 15px;
+}
 
+.colContainer{
+    padding-top: 50px;
+}
+
+.column {
+    float: left;
+    width: 50%;
+
+}
+
+.summary{
+    visibility: hidden;
+}
+
+.summary.visible{
+    visibility: visible;
+    width: 600px;
+    letter-spacing: 3px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#pruList li {
+    padding: 10px 0px; 
+}
+
+.textButton {
+    background-color: slategrey;
+      border: none;
+}
 
 /* Education Page */
+
+/* Contact Page */
+#contact{
+    margin-top: 200px;
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 15px;
+}

@@ -28,13 +28,7 @@ function addRandomGreeting() {
   greetingContainer.innerText = greeting;
 }
 
-function googleText(id) {
-    var content = document.getElementById("google");
+function toggleText(divID) {
+    var content = document.getElementById(divID);
     content.classList.toggle('visible');
 }
-
-function pruText() {
-    var content = document.getElementById("pru");
-    content.classList.toggle('visible');
-}
-

@@ -41,6 +41,9 @@ body{
      background-color: slategrey;
      color: white;
      font-family: Arial, Helvetica, sans-serif;
+     text-align: center;
+     letter-spacing: 5px;
+     font-size: 15px;
 }
 
 .header {
@@ -52,27 +55,13 @@ body{
     margin-bottom: 20px;
 }
 
-
 /* Default Page */
-
 #profile {
     border-radius: 50%;
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 120px;
-}
-
-#default {
-    text-align: center;
-    letter-spacing: 5px;
-}
-
-#h1default {
-    margin-left: auto;
-    margin-right: auto;
-    width: 650px;
-    font-size: 50px;
 }
 
 #funButton {
@@ -87,24 +76,18 @@ body{
   font-size: 15px;
 }
 
-#greeting-container {
+#fact-container {
     margin-top: 20px;
 }
 
 /* Experience Page */
-#experience{
-    text-align: center;
-    letter-spacing: 5px;
-    font-size: 15px;
-}
-
 .colContainer{
     padding-top: 50px;
 }
 
-.column {
+.experienceCol {
     float: left;
-    width: 50%;
+    width: 33.33%;
 
 }
 
@@ -120,7 +103,8 @@ body{
     margin-right: auto;
 }
 
-#pruList li {
+.list li {
+    text-align: left;
     padding: 10px 0px; 
 }
 
@@ -129,12 +113,25 @@ body{
       border: none;
 }
 
-/* Education Page */
+/* Academics Page */
+.section{
+    padding: 30px;
+    height: 400px;
+}
+
+span.academicCol {
+    display: inline-block;
+    float: left;
+    padding: 0px 30px;
+}
+
+.academicCol li{
+    letter-spacing: 3px;
+    text-align: left;
+    padding: 10px 0px; 
+}
 
 /* Contact Page */
 #contact{
     margin-top: 200px;
-    text-align: center;
-    letter-spacing: 5px;
-    font-size: 15px;
 }

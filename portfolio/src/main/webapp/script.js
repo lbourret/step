@@ -32,3 +32,9 @@ function toggleText(divID) {
     var content = document.getElementById(divID);
     content.classList.toggle('visible');
 }
+
+function getData() {
+  fetch('/data').then(response => response.text()).then((quote) => {
+    document.getElementById('data-container').innerText = quote;
+  });
+}

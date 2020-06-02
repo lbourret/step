@@ -16,16 +16,16 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
+  const facts =
       ['My favorite color is purple',  'I love french fries', 'I play soccer', 'My favorite ice cream flavor is coffee',
       'Connecticut born and raised', 'I have never watched Game of Thrones'];
 
   // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  const fact = facts[Math.floor(Math.random() * facts.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const factContainer = document.getElementById('fact-container');
+  factContainer.innerText = fact;
 }
 
 function toggleText(divID) {

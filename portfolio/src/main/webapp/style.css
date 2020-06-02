@@ -64,7 +64,7 @@ body{
     margin-top: 120px;
 }
 
-#funButton {
+#factButton {
   background-color: aliceblue;
   border: none;
   color: steelblue;
@@ -88,7 +88,18 @@ body{
 .experienceCol {
     float: left;
     width: 33.33%;
+}
 
+@media screen and (max-width: 1800px) {
+  .experienceCol {
+      width: 50%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .experienceCol {
+      width: 100%;
+  }
 }
 
 .summary{

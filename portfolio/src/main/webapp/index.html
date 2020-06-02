@@ -2,20 +2,27 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Lian Bourret Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
-    <div id="content", class="header">
-      <h1>Welcome to Lian Bourret's  Portfolio</h1>
-      <img src = "/images/profile.jpeg" alt = "Picture of me">   
-      <p>I'm a rising junior at Wellesley College majoring in Computer Science</p>
-      <a href="https://www.linkedin.com/in/lian-bourret-b54060176/"> Check out my Linkedin</a>
-      
-      <p>Click here to find out more about me:</p>
-      <button onclick="addRandomGreeting()">Fun Fact About Me!</button>
-      <div id="greeting-container"></div>
-    </div>
+
+    <body>
+        <div class="navi">
+            <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
+                <img src="images/linkedin.png" alt="Linkedin Logo" height="30" width="30" id="linkedin">
+            </a>
+            <a href="contact.html">CONTACT</a>
+            <a href="academics.html">ACADEMICS</a>
+            <a href="experience.html">EXPERIENCE</a>
+        </div>
+
+        <img src="images/profile.jpg" alt="Profile Picture" width="400" height="400" id="profile">
+
+        <h1 class="header">LIAN BOURRET</h1>
+        <p>Wellesley College Junior</p>
+        <p>Computer Science Major</p>
+        <button onclick="addRandomGreeting()" id="funButton">Fun Fact Button</button>
+        <div id="fact-container"></div>
   </body>
 </html>

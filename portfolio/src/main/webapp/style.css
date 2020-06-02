@@ -1,19 +1,137 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+/* All Pages */
+
+/* The navbar container */
+.navi {
+    overflow: hidden;
+    background-color: aliceblue;
+    height: 70px;
 }
 
-#greeting-container {
-  margin-top: 20px;
+/* Navbar links */
+#linkedin{
+    border-radius: 25%;
 }
 
-body {
-  background-color:  lightblue;
+.navi a {
+    float: right;
+    display: block;
+    color: steelblue;
+    padding:  20px 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    letter-spacing: 5px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Hover color */
+.navi a:hover {
+    background-color: snow;
+    color: black;
+}
+
+/* Hover color */
+.active {
+    background-color: snow;
+    color: black;
+}
+
+body{
+     background-color: slategrey;
+     color: white;
+     font-family: Arial, Helvetica, sans-serif;
+     text-align: center;
+     letter-spacing: 5px;
+     font-size: 15px;
 }
 
 .header {
-  background-color: #F1F1F1;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    letter-spacing: 5px;
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+/* Default Page */
+#profile {
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 120px;
+}
+
+#funButton {
+  background-color: aliceblue;
+  border: none;
+  color: steelblue;
+  padding: 15px 30px;
+  margin-top: 20px;
   text-align: center;
-  padding: 20px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+}
+
+#fact-container {
+    margin-top: 20px;
+}
+
+/* Experience Page */
+.colContainer{
+    padding-top: 50px;
+}
+
+.experienceCol {
+    float: left;
+    width: 33.33%;
+
+}
+
+.summary{
+    visibility: hidden;
+}
+
+.summary.visible{
+    visibility: visible;
+    width: 600px;
+    letter-spacing: 3px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.list li {
+    text-align: left;
+    padding: 10px 0px; 
+}
+
+.textButton {
+    background-color: slategrey;
+      border: none;
+}
+
+/* Academics Page */
+.section{
+    padding: 30px;
+    height: 400px;
+}
+
+span.academicCol {
+    display: inline-block;
+    float: left;
+    padding: 0px 30px;
+}
+
+.academicCol li{
+    letter-spacing: 3px;
+    text-align: left;
+    padding: 10px 0px; 
+}
+
+/* Contact Page */
+#contact{
+    margin-top: 200px;
 }

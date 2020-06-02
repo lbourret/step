@@ -34,7 +34,25 @@ function toggleText(divID) {
 }
 
 function getData() {
-  fetch('/data').then(response => response.text()).then((quote) => {
-    document.getElementById('data-container').innerText = quote;
+  fetch('/data').then(response => response.json()).then((fruit) => {
+    console.log(fruit.fruit0);
+    console.log(fruit.fruit1);
+    console.log(fruit.fruit2);
+
+    const fruitListElement = document.getElementById('data-container');
+    fruitListElement.innerHTML = 'Fruits: ' + fruit.fruit0 + ', ' + fruit.fruit1 + ', ' + fruit.fruit2;
+    fruitListElement.appendChild(
+        createListElement('fruit0 : ' + fruit.fruit0));
+    fruitListElement.appendChild(
+        createListElement('fruit1: ' + fruit.fruit1));
+    fruitListElement.appendChild(
+        createListElement('fruit2: ' + fruit.fruit2));
   });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }

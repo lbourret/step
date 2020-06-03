@@ -7,7 +7,7 @@
     <script src="script.js"></script>
   </head>
 
-    <body>
+    <body onload="getData()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" alt="Linkedin Logo" height="30" width="30" id="linkedin">
@@ -24,7 +24,13 @@
         <p>Computer Science Major</p>
         <button onclick="addRandomGreeting()" id="factButton">Fun Fact Button</button>
         <div id="fact-container"></div>
-        <button onclick="getData()">Data Button</button>
+
+        <form action="/data" method="POST">
+            <p>Add Fruit</p>
+            <textarea name="text-input">type here</textarea>
+            <br/><br/>
+            <input type="submit"/>
+        </form>
         <div id="data-container"></div>
   </body>
 </html>

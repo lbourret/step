@@ -19,38 +19,44 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.util.*;
+import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+  ArrayList<String> comments = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    ArrayList<String> list = new ArrayList<String>(); 
-    list.add("apples");
-    list.add("oranges");
-    list.add("pineapple");
-
-    response.setContentType("text/html;");
-    String json = convertToJson(list);
-    response.getWriter().println(json);
+    response.setContentType("application/json;");
+    response.getWriter().println(new Gson().toJson(comments));
   }
 
-    /**
-   * Converts a ServerStats instance into a JSON string using manual String concatentation.
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    String text = getParameter(request, "text-input", "");
+
+    comments.add(text);
+    
+    // Respond with the result.
+    response.setContentType("text/html;");
+    response.getWriter().println(comments.toString());
+
+    // Redirect back to the HTML page.
+    response.sendRedirect("index.html");
+  }
+
+   /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
    */
-  private String convertToJson(ArrayList<String> list) {
-    String json = "{";
-    json += "\"fruit0\": ";
-    json += "\"" + list.get(0) + "\"";
-    json += ", ";
-    json += "\"fruit1\": ";
-    json += "\"" + list.get(1) + "\"";
-    json += ", ";
-    json += "\"fruit2\": ";
-    json += "\"" + list.get(2) + "\"";
-    json += "}";
-    return json;
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 }

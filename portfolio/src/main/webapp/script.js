@@ -35,18 +35,14 @@ function toggleText(divID) {
 
 function getData() {
   fetch('/data').then(response => response.json()).then((fruit) => {
-    console.log(fruit.fruit0);
-    console.log(fruit.fruit1);
-    console.log(fruit.fruit2);
+    console.log(fruit);
 
     const fruitListElement = document.getElementById('data-container');
-    fruitListElement.innerHTML = 'Fruits: ' + fruit.fruit0 + ', ' + fruit.fruit1 + ', ' + fruit.fruit2;
-    fruitListElement.appendChild(
-        createListElement('fruit0 : ' + fruit.fruit0));
-    fruitListElement.appendChild(
-        createListElement('fruit1: ' + fruit.fruit1));
-    fruitListElement.appendChild(
-        createListElement('fruit2: ' + fruit.fruit2));
+    fruitListElement.innerHTML = 'Fruits: ';
+
+    fruit.forEach((f) => {
+        fruitListElement.appendChild(createListElement(f));
+    })
   });
 }
 

@@ -18,6 +18,9 @@ import java.io.IOException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +31,23 @@ import com.google.gson.Gson;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-  ArrayList<String> comments = new ArrayList<String>();
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    ArrayList<String> comments = new ArrayList<String>();
+    
+    for (Entity entity : results.asIterable()) {
+      String title = (String) entity.getProperty("title");
+      long timestamp = (long) entity.getProperty("timestamp");
+
+      String commentInfo = (title + " " + String.valueOf(timestamp));
+      comments.add(commentInfo);
+    }
+
     response.setContentType("application/json;");
     response.getWriter().println(new Gson().toJson(comments));
   }
@@ -47,14 +63,7 @@ public class DataServlet extends HttpServlet {
     commentEntity.setProperty("title", text);
     commentEntity.setProperty("timestamp", timestamp);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
-
-    comments.add(text);
-    
-    // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println(comments.toString());
 
     // Redirect back to the HTML page.
     response.sendRedirect("index.html");

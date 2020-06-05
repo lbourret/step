@@ -28,27 +28,70 @@ function addRandomGreeting() {
   factContainer.innerText = fact;
 }
 
+/**
+ * Toggles visibility class
+ */
 function toggleText(divID) {
     var content = document.getElementById(divID);
     content.classList.toggle('visible');
 }
 
-function getData() {
-  fetch('/data').then(response => response.json()).then((fruit) => {
-    console.log(fruit);
+/**
+ * Retrieves comments from server
+ */
+function getComment() {
+  var limit = document.getElementById('limit').value;
+  fetch('/list-comments?limit='+limit).then(response => response.json()).then((comments) => {
 
-    const fruitListElement = document.getElementById('data-container');
-    fruitListElement.innerHTML = 'Fruits: ';
-
-    fruit.forEach((f) => {
-        fruitListElement.appendChild(createListElement(f));
-    })
+    const commentListElement = document.getElementById('comment-container');
+    commentListElement.innerHTML = 'Comments: ';
+    comments.forEach((comment) => {
+        commentListElement.appendChild(createCommentElement(comment));
+    })    
   });
 }
 
 /** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+function createCommentElement(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.innerText = comment.title;
+
+  const deleteButtonElement = document.createElement('button');
+  deleteButtonElement.innerText = 'Delete';
+  deleteButtonElement.addEventListener('click', () => {
+    deleteComment(comment);
+
+  // Remove the task from the DOM.
+    commentElement.remove();
+  });
+  commentElement.appendChild(deleteButtonElement);
+  return commentElement;
+}
+
+/** Set limit's value to limit from URL */
+function initParam(){
+  const limit = getURLParam('limit');
+  document.getElementById('limit').value = limit;
+}
+
+/** Get limit parameter from URL */
+function getURLParam(paramName){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(paramName);
+}
+
+/** 
+    Tells the server to delete the comment.
+    @param comment if entered, specific comment will delete else all comments will delete
+*/
+async function deleteComment(comment) {
+ if (!comment) {
+  const response = await fetch('/delete-all-comments', {method: 'POST'});
+  const comments = await response.text();
+  document.getElementById('comment-container').innerText = 'COMMENTS:' + comments;
+ } else {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  fetch('/delete-comment', {method: 'POST', body: params});
+ }
 }

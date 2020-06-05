@@ -7,7 +7,7 @@
         <script src="script.js"></script>
     </head>
 
-    <body>
+    <body onload="initParam(); getComment()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" height="30" width="30" id="linkedin">
@@ -23,5 +23,23 @@
             <p>Email: lbourret@wellesley.edu</p>
             <p><a href="https://www.linkedin.com/in/lian-bourret-b54060176/">LINKEDIN PROFILE</a></p>
         </div>
+
+                <form action="/new-comment" method="post">
+            <p>COMMENT BELOW</p>
+            <span>
+                <input type="number" id="limit" name="limit"> 
+            </span>
+            <span>
+                <button onclick="getComment();return false;">Limit:</button>
+            </span>
+            <br/><br/>
+
+            <textarea name="text-input">type here</textarea>
+            <br/><br/>
+            <input type="submit"/>
+        </form>
+
+        <button onclick="deleteComment()">Delete All</button>
+        <div id="comment-container"></div>
     </body>
   </html>

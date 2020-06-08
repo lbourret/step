@@ -7,7 +7,7 @@
         <script src="script.js"></script>
     </head>
 
-    <body onload="initParam(); getComment()">
+    <body onload="initParam('limit'); initParam('sort'); initParam('searchName'); getComment()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" height="30" width="30" id="linkedin">
@@ -24,22 +24,39 @@
             <p><a href="https://www.linkedin.com/in/lian-bourret-b54060176/">LINKEDIN PROFILE</a></p>
         </div>
 
+        <div id="commentArea">
+            <h2>COMMENT BELOW</h2>
+            <div class="commentCol">
+                <div id="commentForm">
                 <form action="/new-comment" method="post">
-            <p>COMMENT BELOW</p>
-            <span>
-                <input type="number" id="limit" name="limit"> 
-            </span>
-            <span>
-                <button onclick="getComment();return false;">Limit:</button>
-            </span>
-            <br/><br/>
+                        <p>NAME</p>
+                        <input type="text" id="name" name="name" required> 
+                        <p>COMMENT</p>
+                        <input name="text-input" required>
+                        <br/><br/>
+                        <input type="submit" value="SUBMIT" class="button"/>
+                        <br/><br/>
+                        <p>DISPLAY OPTIONS</p>
+                        <label for="limit">COMMENT LIMIT</label>
+                        <input type="number" id="limit" name="limit" value=5> 
+                        <label for="sort">SORT BY:</label>
+                        <select name="sort" id="sort" class="button smallDefaultButton">
+                            <option value="descending">NEWEST</option>
+                            <option value="ascending">OLDEST</option>
+                        </select>
+                        <br/><br/>
+                        <label for="limit">FILTER NAME</label>
+                        <input type="text" id="searchName" name="searchName">
+                        <button onclick="getComment();return false;" class="smallDefaultButton">REFRESH</button>
+                    </form>
 
-            <textarea name="text-input">type here</textarea>
-            <br/><br/>
-            <input type="submit"/>
-        </form>
-
-        <button onclick="deleteComment()">Delete All</button>
-        <div id="comment-container"></div>
+                    <button onclick="deleteAllComments()" class="smallDefaultButton">DELETE ALL</button>
+                </div>
+            </div>
+            
+            <div class="commentCol">
+               <div id="comment-container"></div>
+           </div>
+        </div>
     </body>
   </html>

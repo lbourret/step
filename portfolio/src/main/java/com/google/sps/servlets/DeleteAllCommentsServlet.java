@@ -42,21 +42,22 @@ public class DeleteAllCommentsServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-System.out.println("start delete");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Comment");
     PreparedQuery results = datastore.prepare(query);
+
+    // Track comments deleted.
+    int count = 0;
 
     // Delete all comments.
     for (Entity entity : results.asIterable()) {
       Key commentEntityKey = entity.getKey();
       datastore.delete(commentEntityKey);
+      count++;
     }
 
     // Returns empty response.
     response.setContentType("application/json;");
-    response.getWriter().println();
-    System.out.println("end delete");
+    response.getWriter().println(count);
   }
-  
 }

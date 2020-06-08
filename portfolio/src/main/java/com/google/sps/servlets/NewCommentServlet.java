@@ -28,6 +28,9 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.PreparedQuery;
@@ -43,19 +46,29 @@ public class NewCommentServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get the input from form text box
-    System.out.println("start comment");
     String text = getParameter(request, "text-input", null);
+    String name = getParameter(request, "name", null);
     long timestamp = System.currentTimeMillis();
-
+    
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("title", text);
+    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 
     datastore.put(commentEntity);
 
-    // Redirect back to the HTML page.  
-    response.sendRedirect("contact.html?limit="+getLimit(request));
-    System.out.println("end comment");
+    // Redirect back to the HTML page with parameters.
+    int limit;
+    try {
+      limit =  Integer.parseInt(getParameter(request, "limit", "5"));
+    } catch (NumberFormatException e) {
+      limit = 5;
+    }
+
+    // Select sort method.
+    String sort = getParameter(request, "sort", "descending");
+
+    response.sendRedirect("contact.html?limit=" + limit + "&sort=" + sort);
   }
 
    /**
@@ -64,27 +77,10 @@ public class NewCommentServlet extends HttpServlet {
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
+
     if (value == null) {
       return defaultValue;
     }
     return value;
   }
-
-  /** Returns the choice entered by the player, or -1 if the choice was invalid. */
-  private int getLimit(HttpServletRequest request) {
-    // Get the input from the form.
-    String limitString = request.getParameter("limit");
-
-    // Convert the input to an int.
-    int limit;
-
-    try {
-      limit = Integer.parseInt(limitString);
-    } catch (NumberFormatException e) {
-      System.err.println("Could not convert to int: " + limitString);
-      return -1;
-    }
-    return limit;
-  }
-  
 }

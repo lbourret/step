@@ -29,6 +29,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Key;
@@ -43,29 +46,46 @@ public class ListCommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    System.out.println("start list");
-    // Get max limit on comments.
-    int limit = getLimit(request);
+    Query query = new Query("Comment");
 
+    // Filter on name.
+    query = filterQuery(request, query, "searchName", "name");
+
+    // Select sort method.
+    String sort = getParameter(request, "sort", "descending");
+    if (sort.equals("ascending")){
+      query.addSort("timestamp", SortDirection.ASCENDING);
+    } else {
+      query.addSort("timestamp", SortDirection.DESCENDING);
+    }
+    
+    // Get max limit on comments. Invalid input will defult to 5.
+    int limit;
+    try {
+      limit =  Integer.parseInt(getParameter(request, "limit", "5"));
+    } catch (NumberFormatException e) {
+      limit = 5;
+    }
     List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
-    ArrayList<Comment> comments = new ArrayList<>();
 
     // Populate list with comment kind of entities
+    ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results) {
       long id = entity.getKey().getId();
-      String title = (String) entity.getProperty("title");
+      String name = (String) entity.getProperty("name");
+      String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, title, timestamp);
+      Comment comment = new Comment(id, name, text, timestamp);
       comments.add(comment);
     }
+
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(comments));
-        System.out.println("end list");
   }
 
   /**
+   * Get document value of param
    * @return the request parameter, or the default value if the parameter
    *         was not specified by the client
    */
@@ -77,20 +97,21 @@ public class ListCommentsServlet extends HttpServlet {
     return value;
   }
 
-  /** Returns the choice entered by the player, or -1 if the choice was invalid. */
-  private int getLimit(HttpServletRequest request) {
-    // Get the input from the form.
-    String limitString = request.getParameter("limit");
+  /**
+   * Filter query based on given params
+   * @param searchParam parameter that holds specified value to filter on
+   * @param matchParam parameter to filter for specified value 
+   * @return query filtered by searchParam that matches matchParam
+   */
+  private Query filterQuery(HttpServletRequest request, Query query, String searchParam, String matchParam)  {
+    String searchValue = getParameter(request, searchParam, null);
 
-    // Convert the input to an int.
-    int limit;
-    try {
-      limit = Integer.parseInt(limitString);
-    } catch (NumberFormatException e) {
-      System.err.println("Could not convert to int: " + limitString);
-      return 0;
+    // No param to filter on.
+    if (searchValue.equals("")){
+        return query;
     }
-    return limit;
+
+    Filter filter = new FilterPredicate(matchParam, FilterOperator.EQUAL, searchValue);
+    return query.setFilter(filter);
   }
-  
 }

@@ -91,7 +91,19 @@ button {
     width: 33.33%;
 }
 
-.summary {
+@media screen and (max-width: 1800px) {
+  .experienceCol {
+      width: 50%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .experienceCol {
+      width: 100%;
+  }
+}
+
+.summary{
     visibility: hidden;
 }
 

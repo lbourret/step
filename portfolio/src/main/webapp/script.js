@@ -28,7 +28,106 @@ function addRandomGreeting() {
   factContainer.innerText = fact;
 }
 
+/**
+ * Toggles visibility class
+ */
 function toggleText(divID) {
     var content = document.getElementById(divID);
     content.classList.toggle('visible');
+}
+
+/**
+ * Retrieves comments from server
+ */
+function getComment() {
+  const limit = document.getElementById('limit').value;
+  const sort = document.getElementById('sort').value;
+  const searchParam = document.getElementById('searchName').value;
+
+  fetch('/list-comments?limit=' + limit + '&sort=' + sort + '&searchName=' + searchParam).then(response => response.json()).then((comments) => {
+
+    const commentListElement = document.getElementById('comment-container');
+    commentListElement.innerHTML = 'COMMENTS: ';
+    comments.forEach((comment) => {
+        commentListElement.appendChild(createCommentElement(comment));
+    })    
+  });
+}
+
+/** Creates a comment element. */
+function createCommentElement(comment) {
+  const commentElement = document.createElement('li');
+  commentElement.className = 'comment';
+  const commentDetails = document.createElement('span');
+  commentDetails.className = 'comment';
+  const commentBody = document.createElement('span');
+  commentBody.className = 'comment';
+
+  // Time
+  var date = new Date(comment.timestamp);
+  const dateElement = document.createElement('p');
+  dateElement.innerText = date.toDateString();
+
+  // Name 
+  const nameElement = document.createElement('p');
+  nameElement.innerText = comment.name;
+
+  // Text 
+  const textElement = document.createElement('p');
+  textElement.innerText = comment.text;
+
+  // Delete Button
+  const deleteButtonElement = document.createElement('button');
+  deleteButtonElement.className = 'smallDefaultButton';
+  deleteButtonElement.innerText = 'Delete';
+  deleteButtonElement.addEventListener('click', () => {
+    deleteComment(comment);
+
+  // Remove the comment from the DOM.
+    commentElement.remove();
+  });
+
+  commentDetails.appendChild(dateElement);
+  commentDetails.appendChild(nameElement);
+  commentBody.appendChild(textElement);
+  commentElement.appendChild(commentDetails);
+  commentElement.appendChild(commentBody);
+  commentElement.appendChild(deleteButtonElement);
+
+  return commentElement;
+}
+
+/** Set limit's value to limit from URL. */
+function initParam(paramName){
+  const limit = getURLParam(paramName);
+
+  // Only take URL param if not null
+  if (limit){
+      document.getElementById(paramName).value = limit;
+  }
+}
+
+/** Get parameters from URL */
+function getURLParam(paramName){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(paramName);
+}
+
+/** 
+    Tells the server to delete the comment.
+    @param comment specificied comment to delete
+*/
+aysnc function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  await fetch('/delete-comment', {method: 'POST', body: params});
+  getComment();
+}
+
+/** Tells the server to delete all comments. */
+async function deleteAllComments() {
+  const response = await fetch('/delete-all-comments', {method: 'POST'});
+  const comments = await response.text();
+  console.log("# Comments Deleted: " + comments);
+  getComment();
 }

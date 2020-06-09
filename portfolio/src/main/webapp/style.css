@@ -8,7 +8,7 @@
 }
 
 /* Navbar links */
-#linkedin{
+#linkedin {
     border-radius: 25%;
 }
 
@@ -55,6 +55,19 @@ body{
     margin-bottom: 20px;
 }
 
+button {
+  background-color: aliceblue;
+  border: none;
+  color: steelblue;
+  padding: 15px 30px;
+  margin: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  letter-spacing: 5px;
+}
+
 /* Default Page */
 #profile {
     border-radius: 50%;
@@ -62,18 +75,6 @@ body{
     margin-left: auto;
     margin-right: auto;
     margin-top: 120px;
-}
-
-#factButton {
-  background-color: aliceblue;
-  border: none;
-  color: steelblue;
-  padding: 15px 30px;
-  margin-top: 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 15px;
 }
 
 #fact-container {
@@ -106,7 +107,7 @@ body{
     visibility: hidden;
 }
 
-.summary.visible{
+.summary.visible {
     visibility: visible;
     width: 600px;
     letter-spacing: 3px;
@@ -125,7 +126,7 @@ body{
 }
 
 /* Academics Page */
-.section{
+.section {
     padding: 30px;
     height: 400px;
 }
@@ -136,13 +137,56 @@ span.academicCol {
     padding: 0px 30px;
 }
 
-.academicCol li{
+.academicCol li {
     letter-spacing: 3px;
     text-align: left;
     padding: 10px 0px; 
 }
 
 /* Contact Page */
-#contact{
-    margin-top: 200px;
+.commentCol {
+    float: left;
+    width: 50%;
+}
+
+#commentForm{
+    float: right;
+    padding: 30px;
+}
+
+#comment-container {
+    letter-spacing: 3px;
+    list-style-type: none;
+    padding: 30px;
+    float: left;
+}
+
+li.comment {
+    margin: 10px;
+}
+
+span.comment {
+    display: inline-block;
+    padding: 10px;
+}
+
+.button {
+    background-color: aliceblue;
+    border: none;
+    color: steelblue;
+    padding: 15px 30px;
+    margin: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    letter-spacing: 5px;
+}
+
+.smallDefaultButton {
+    padding: 10px;
+}
+
+#sort {
+    margin: 0px;
 }

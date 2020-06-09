@@ -117,10 +117,10 @@ function getURLParam(paramName){
     Tells the server to delete the comment.
     @param comment specificied comment to delete
 */
-function deleteComment(comment) {
+aysnc function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  fetch('/delete-comment', {method: 'POST', body: params});
+  await fetch('/delete-comment', {method: 'POST', body: params});
   getComment();
 }
 

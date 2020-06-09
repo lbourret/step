@@ -39,7 +39,7 @@ function toggleText(divID) {
 /**
  * Retrieves comments from server
  */
-function getComment() {
+function getComments() {
   const limit = document.getElementById('limit').value;
   const sort = document.getElementById('sort').value;
   const searchParam = document.getElementById('searchName').value;
@@ -55,25 +55,24 @@ function getComment() {
 }
 
 /**
- * Checks user's authentication status
+ * Check user's authentication status & display login or logout URL depending on status
  */
 function isAuth() {
   fetch('/auth').then(response => response.json()).then((user) => {
+    const authElement = document.getElementById('login-container');  
+    const authURL = document.createElement('a');
+
+    // Change text based on login status.
     if (user.loggedIn){
-      getComment();
-      const logoutElement = document.getElementById('login-container');
-      const logout = document.createElement('a');
-      logout.innerHTML = 'LOGOUT';
-      logout.href = user.url;
-      logoutElement.appendChild(logout);  
+      authURL.innerHTML = 'LOGOUT';
+      toggleText('submitForm'); 
 
     } else {
-      const loginElement = document.getElementById('login-container');
-      const login = document.createElement('a');
-      login.innerHTML = 'PLEASE LOG IN';
-      login.href = user.url;
-      loginElement.appendChild(login);
+      authURL.innerHTML = 'PLEASE LOG IN';
+      authURL.href = user.url;
     }
+    authURL.href = user.url;
+    authElement.appendChild(authURL); 
   });
 }
 
@@ -144,7 +143,7 @@ async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
   await fetch('/delete-comment', {method: 'POST', body: params});;
-  getComment();
+  getComments();
 }
 
 /** Tells the server to delete all comments. */
@@ -152,5 +151,5 @@ async function deleteAllComments() {
   const response = await fetch('/delete-all-comments', {method: 'POST'});
   const comments = await response.text();
   console.log("# Comments Deleted: " + comments);
-  getComment();
+  getComments();
 }

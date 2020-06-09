@@ -46,11 +46,34 @@ function getComment() {
 
   fetch('/list-comments?limit=' + limit + '&sort=' + sort + '&searchName=' + searchParam).then(response => response.json()).then((comments) => {
 
-    const commentListElement = document.getElementById('comment-container');
-    commentListElement.innerHTML = 'COMMENTS: ';
-    comments.forEach((comment) => {
+      const commentListElement = document.getElementById('comment-container');
+      commentListElement.innerHTML = 'COMMENTS: ';
+      comments.forEach((comment) => {
         commentListElement.appendChild(createCommentElement(comment));
-    })    
+      })    
+  });
+}
+
+/**
+ * Checks user's authentication status
+ */
+function isAuth() {
+  fetch('/auth').then(response => response.json()).then((user) => {
+    if (user.loggedIn){
+      getComment();
+      const logoutElement = document.getElementById('login-container');
+      const logout = document.createElement('a');
+      logout.innerHTML = 'LOGOUT';
+      logout.href = user.url;
+      logoutElement.appendChild(logout);  
+
+    } else {
+      const loginElement = document.getElementById('login-container');
+      const login = document.createElement('a');
+      login.innerHTML = 'PLEASE LOG IN';
+      login.href = user.url;
+      loginElement.appendChild(login);
+    }
   });
 }
 
@@ -117,10 +140,10 @@ function getURLParam(paramName){
     Tells the server to delete the comment.
     @param comment specificied comment to delete
 */
-aysnc function deleteComment(comment) {
+async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  await fetch('/delete-comment', {method: 'POST', body: params});
+  await fetch('/delete-comment', {method: 'POST', body: params});;
   getComment();
 }
 

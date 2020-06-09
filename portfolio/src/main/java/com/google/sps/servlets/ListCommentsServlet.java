@@ -108,7 +108,7 @@ public class ListCommentsServlet extends HttpServlet {
 
     // No param to filter on.
     if (searchValue.equals("")){
-        return query;
+      return query;
     }
 
     Filter filter = new FilterPredicate(matchParam, FilterOperator.EQUAL, searchValue);

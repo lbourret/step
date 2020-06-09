@@ -57,11 +57,13 @@ public class NewCommentServlet extends HttpServlet {
 
     // Get the input from form text box
     String text = getParameter(request, "text-input", null);
-    String name = userService.getCurrentUser().getEmail();
+    String username = getParameter(request, "username", null);
+    String email = userService.getCurrentUser().getEmail();
     long timestamp = System.currentTimeMillis();
     
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("username", username);
+    commentEntity.setProperty("email", email);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 

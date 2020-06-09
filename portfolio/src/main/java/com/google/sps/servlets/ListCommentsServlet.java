@@ -52,7 +52,7 @@ public class ListCommentsServlet extends HttpServlet {
     Query query = new Query("Comment");
 
     // Filter on name.
-    query = filterQuery(request, query, "searchName", "name");
+    query = filterQuery(request, query, "searchName", "username");
 
     // Select sort method.
     String sort = getParameter(request, "sort", "descending");
@@ -75,11 +75,12 @@ public class ListCommentsServlet extends HttpServlet {
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results) {
       long id = entity.getKey().getId();
-      String name = (String) entity.getProperty("name");
+      String username = (String) entity.getProperty("username");
+      String email = (String) entity.getProperty("email");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, name, text, timestamp);
+      Comment comment = new Comment(id, username, email, text, timestamp);
       comments.add(comment);
     }
 

@@ -44,10 +44,14 @@
 
             <div class="commentCol">
                 <form action="/new-comment" method="post" id="submitForm">
+                    <p>NAME</p>
+                    <input name="username" required>
                     <p>COMMENT</p>
                     <input name="text-input" required>
                     <br/><br/>
                     <input type="submit" value="SUBMIT" class="button"/>
+                    <br/><br/>
+                    <button onclick="deleteAllComments();return false;">DELETE ALL COMMENTS</button>
                 </form>
             </div>
             

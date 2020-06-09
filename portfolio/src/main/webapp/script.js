@@ -92,7 +92,7 @@ function createCommentElement(comment) {
 
   // Name 
   const nameElement = document.createElement('p');
-  nameElement.innerText = comment.name;
+  nameElement.innerText = comment.username;
 
   // Text 
   const textElement = document.createElement('p');

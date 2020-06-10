@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
@@ -41,17 +44,26 @@ import com.google.appengine.api.datastore.KeyFactory;
 @WebServlet("/new-comment")
 public class NewCommentServlet extends HttpServlet {
 
-  DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    UserService userService = UserServiceFactory.getUserService();
+
+    // Only logged-in users can post messages
+    if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/contact.html");
+      return;
+    }
+
     // Get the input from form text box
     String text = getParameter(request, "text-input", null);
-    String name = getParameter(request, "name", null);
+    String username = getParameter(request, "username", null);
+    String email = userService.getCurrentUser().getEmail();
     long timestamp = System.currentTimeMillis();
     
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("name", name);
+    commentEntity.setProperty("username", username);
+    commentEntity.setProperty("email", email);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 

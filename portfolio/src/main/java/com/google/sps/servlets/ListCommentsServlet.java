@@ -24,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
@@ -49,7 +52,7 @@ public class ListCommentsServlet extends HttpServlet {
     Query query = new Query("Comment");
 
     // Filter on name.
-    query = filterQuery(request, query, "searchName", "name");
+    query = filterQuery(request, query, "searchName", "username");
 
     // Select sort method.
     String sort = getParameter(request, "sort", "descending");
@@ -72,11 +75,12 @@ public class ListCommentsServlet extends HttpServlet {
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results) {
       long id = entity.getKey().getId();
-      String name = (String) entity.getProperty("name");
+      String username = (String) entity.getProperty("username");
+      String email = (String) entity.getProperty("email");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, name, text, timestamp);
+      Comment comment = new Comment(id, username, email, text, timestamp);
       comments.add(comment);
     }
 
@@ -108,7 +112,7 @@ public class ListCommentsServlet extends HttpServlet {
 
     // No param to filter on.
     if (searchValue.equals("")){
-        return query;
+      return query;
     }
 
     Filter filter = new FilterPredicate(matchParam, FilterOperator.EQUAL, searchValue);

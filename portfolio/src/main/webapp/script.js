@@ -39,18 +39,40 @@ function toggleText(divID) {
 /**
  * Retrieves comments from server
  */
-function getComment() {
+function getComments() {
   const limit = document.getElementById('limit').value;
   const sort = document.getElementById('sort').value;
   const searchParam = document.getElementById('searchName').value;
 
   fetch('/list-comments?limit=' + limit + '&sort=' + sort + '&searchName=' + searchParam).then(response => response.json()).then((comments) => {
 
-    const commentListElement = document.getElementById('comment-container');
-    commentListElement.innerHTML = 'COMMENTS: ';
-    comments.forEach((comment) => {
+      const commentListElement = document.getElementById('comment-container');
+      commentListElement.innerHTML = 'COMMENTS: ';
+      comments.forEach((comment) => {
         commentListElement.appendChild(createCommentElement(comment));
-    })    
+      })    
+  });
+}
+
+/**
+ * Check user's authentication status & display login or logout URL depending on status
+ */
+function isAuth() {
+  fetch('/auth').then(response => response.json()).then((user) => {
+    const authElement = document.getElementById('login-container');  
+    const authURL = document.createElement('a');
+
+    // Change text based on login status.
+    if (user.loggedIn){
+      authURL.innerHTML = 'LOGOUT';
+      toggleText('submitForm'); 
+
+    } else {
+      authURL.innerHTML = 'PLEASE LOG IN';
+      authURL.href = user.url;
+    }
+    authURL.href = user.url;
+    authElement.appendChild(authURL); 
   });
 }
 
@@ -70,7 +92,7 @@ function createCommentElement(comment) {
 
   // Name 
   const nameElement = document.createElement('p');
-  nameElement.innerText = comment.name;
+  nameElement.innerText = comment.username;
 
   // Text 
   const textElement = document.createElement('p');
@@ -117,11 +139,11 @@ function getURLParam(paramName){
     Tells the server to delete the comment.
     @param comment specificied comment to delete
 */
-aysnc function deleteComment(comment) {
+async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  await fetch('/delete-comment', {method: 'POST', body: params});
-  getComment();
+  await fetch('/delete-comment', {method: 'POST', body: params});;
+  getComments();
 }
 
 /** Tells the server to delete all comments. */
@@ -129,5 +151,5 @@ async function deleteAllComments() {
   const response = await fetch('/delete-all-comments', {method: 'POST'});
   const comments = await response.text();
   console.log("# Comments Deleted: " + comments);
-  getComment();
+  getComments();
 }

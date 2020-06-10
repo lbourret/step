@@ -14,20 +14,14 @@
 
 package com.google.sps.data;
 
-/** A comment */
-public final class Comment {
+/** A user */
+public final class User {
 
-  private final long id;
-  private final String username;
-  private final String email;
-  private final String text;
-  private final long timestamp;
+  private final String url; // log in or log our depending on log status
+  private final boolean loggedIn;
 
-  public Comment(long id, String username, String email, String text, long timestamp) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.text = text;
-    this.timestamp = timestamp;
+  public User(String url, boolean loggedIn) {
+    this.url = url;
+    this.loggedIn = loggedIn;
   }
 }

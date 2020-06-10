@@ -43,8 +43,9 @@ function getComments() {
   const limit = document.getElementById('limit').value;
   const sort = document.getElementById('sort').value;
   const searchParam = document.getElementById('searchName').value;
+  const language = document.getElementById('language').value;
 
-  fetch('/list-comments?limit=' + limit + '&sort=' + sort + '&searchName=' + searchParam).then(response => response.json()).then((comments) => {
+  fetch('/list-comments?limit=' + limit + '&sort=' + sort + '&searchName=' + searchParam + '&language=' + language).then(response => response.json()).then((comments) => {
 
       const commentListElement = document.getElementById('comment-container');
       commentListElement.innerHTML = 'COMMENTS: ';
@@ -117,6 +118,14 @@ function createCommentElement(comment) {
   commentElement.appendChild(deleteButtonElement);
 
   return commentElement;
+}
+
+/** Calls initParam on parameters for listComment. */
+function init(){
+    initParam('limit'); 
+    initParam('sort'); 
+    initParam('searchName');
+    initParam('language');
 }
 
 /** Set limit's value to limit from URL. */

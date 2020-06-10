@@ -69,18 +69,8 @@ public class NewCommentServlet extends HttpServlet {
 
     datastore.put(commentEntity);
 
-    // Redirect back to the HTML page with parameters.
-    int limit;
-    try {
-      limit =  Integer.parseInt(getParameter(request, "limit", "5"));
-    } catch (NumberFormatException e) {
-      limit = 5;
-    }
-
-    // Select sort method.
-    String sort = getParameter(request, "sort", "descending");
-
-    response.sendRedirect("contact.html?limit=" + limit + "&sort=" + sort);
+    // Redirect to contact page with default display params
+    response.sendRedirect("contact.html?limit=5&sort=descending");
   }
 
    /**

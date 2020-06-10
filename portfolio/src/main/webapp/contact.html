@@ -7,7 +7,7 @@
         <script src="script.js"></script>
     </head>
 
-    <body onload="initParam('limit'); initParam('sort'); initParam('searchName'); getComments(); isAuth()">
+    <body onload="init (); getComments(); isAuth()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" height="30" width="30" id="linkedin">
@@ -36,10 +36,18 @@
                     <option value="descending">NEWEST</option>
                     <option value="ascending">OLDEST</option>
                 </select>
+                <label for="language">CHOOSE LANGUAGE:</label>
+                <select name="language" id="language" class="button smallDefaultButton">
+                    <option value="en">ENGLISH</option>
+                    <option value="zh">CHINESE</option>
+                    <option value="es">SPANISH</option>
+                    <option value="hi">HINDI</option>
+                    <option value="ar">ARABIC</option>
+                </select>
                 <br/><br/>
-                <label for="limit">FILTER NAME</label>
+                <label for="searchName">FILTER NAME</label>
                 <input type="text" id="searchName" name="searchName">
-                <button onclick="getComment();return false;" class="smallDefaultButton">REFRESH</button>
+                <button onclick="getComments()" class="smallDefaultButton">REFRESH</button>
             </form>
 
             <div class="commentCol">

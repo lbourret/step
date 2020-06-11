@@ -7,7 +7,7 @@
         <script src="script.js"></script>
     </head>
 
-    <body onload="initParam('limit'); initParam('sort'); initParam('searchName'); getComments(); isAuth()">
+    <body onload="initParam('limit'); initParam('sort'); initParam('searchName'); getComments(); isAuth(); getBlobURL()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" height="30" width="30" id="linkedin">
@@ -31,7 +31,7 @@
                 <p>DISPLAY OPTIONS</p>
                 <label for="limit">COMMENT LIMIT</label>
                 <input type="number" id="limit" name="limit" value=5> 
-                <label for="sort">SORT BY:</label>
+                <label for="sort">SORT BY</label>
                 <select name="sort" id="sort" class="button smallDefaultButton">
                     <option value="descending">NEWEST</option>
                     <option value="ascending">OLDEST</option>
@@ -48,6 +48,11 @@
                     <input name="username" required>
                     <p>COMMENT</p>
                     <input name="text-input" required>
+                    <br/><br/>
+                    <p>IMAGE UPLOAD</p>
+                    <input type="file" name="image">
+                    <button id="fileButton" onclick="getFileURL();return false;">UPLOAD</button>
+                    <p id="fileURL"></p>
                     <br/><br/>
                     <input type="submit" value="SUBMIT" class="button"/>
                     <br/><br/>

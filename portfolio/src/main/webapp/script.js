@@ -142,7 +142,7 @@ function getURLParam(paramName){
 async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  await fetch('/delete-comment', {method: 'POST', body: params});;
+  await fetch('/delete-comment', {method: 'POST', body: params});
   getComments();
 }
 
@@ -152,4 +152,12 @@ async function deleteAllComments() {
   const comments = await response.text();
   console.log("# Comments Deleted: " + comments);
   getComments();
+}
+
+function getBlobURL() {
+    fetch('/blobstore-upload-url').then(response => response.text())
+    .then((url) => {
+      document.getElementById("fileURL").innerText = url;
+    });
+
 }

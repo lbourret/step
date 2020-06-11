@@ -43,6 +43,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
+import com.google.api.client.http.HttpResponseException;
+import com.google.cloud.translate.TranslateException;
 
 /** Servlet that returns comments */
 @WebServlet("/list-comments")
@@ -129,19 +131,22 @@ public class ListCommentsServlet extends HttpServlet {
   }
 
   /**
-   * Translate text
+   * Translates text
    * @param text comment to translate
    * @return translated text
    */
-  private String translate(HttpServletRequest request, String text){
+  private String translate(HttpServletRequest request, String text) {
     // Get the request language param with English default.
     String languageCode = getParameter(request, "language", "en");
 
-    // Do the translation.
-    Translate translate = TranslateOptions.getDefaultInstance().getService();
-    Translation translation =
-        translate.translate(text, Translate.TranslateOption.targetLanguage(languageCode));
-    
-    return translation.getTranslatedText();
+    String translatedText;
+    try {
+      Translate translate = TranslateOptions.getDefaultInstance().getService();
+      Translation translation = translate.translate(text, Translate.TranslateOption.targetLanguage(languageCode));
+      translatedText = translation.getTranslatedText();
+    } catch (TranslateException e) {
+      return text;
+    }
+    return translatedText;
   }
 }

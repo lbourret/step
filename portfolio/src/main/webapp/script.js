@@ -13,9 +13,9 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fun facts to Home page.
  */
-function addRandomGreeting() {
+function addRandomFact() {
   const facts =
       ['My favorite color is purple',  'I love french fries', 'I play soccer', 'My favorite ice cream flavor is coffee',
       'Connecticut born and raised', 'I have never watched Game of Thrones'];
@@ -100,8 +100,10 @@ function createCommentElement(comment) {
   textElement.innerText = comment.text;
 
   // Image 
-  const imageElement = document.createElement('img');
-  imageElement.src = comment.image;
+  imageElement = document.createElement('img');
+  if (comment.image){
+    imageElement.src = comment.image;
+  }
 
   // Delete Button
   const deleteButtonElement = document.createElement('button');
@@ -117,20 +119,23 @@ function createCommentElement(comment) {
   commentDetails.appendChild(dateElement);
   commentDetails.appendChild(nameElement);
   commentBody.appendChild(textElement);
-  commentBody.appendChild(imageElement);
   commentElement.appendChild(commentDetails);
   commentElement.appendChild(commentBody);
   commentElement.appendChild(deleteButtonElement);
+  commentElement.appendChild(imageElement);
 
   return commentElement;
 }
 
 /** Calls initParam on parameters for listComment. */
-function init(){
+function initFunctions(){
     initParam('limit'); 
     initParam('sort'); 
     initParam('searchName');
     initParam('language');
+    getComments(); 
+    isAuth(); 
+    getBlobURL();
 }
 
 /** Set limit's value to limit from URL. */
@@ -150,8 +155,8 @@ function getURLParam(paramName){
 }
 
 /** 
-    Tells the server to delete the comment.
-    @param comment specificied comment to delete
+*  Tells the server to delete the comment.
+*  @param comment specificied comment to delete
 */
 async function deleteComment(comment) {
   const params = new URLSearchParams();
@@ -168,14 +173,14 @@ async function deleteAllComments() {
   getComments();
 }
 
+/** Get Blobstore URL */
 function getBlobURL() {
     fetch("/upload-blobstore-url").then((response) => {
         return response.text();
-      })
+    })
       .then((imageUploadUrl) => {
-        console.log(imageUploadUrl);
-        const messageForm = document.getElementById('submitForm');
-        messageForm.action = imageUploadUrl;
-      });
+        const submitForm = document.getElementById('submitForm');
+        submitForm.action = imageUploadUrl;
+     });
 
 }

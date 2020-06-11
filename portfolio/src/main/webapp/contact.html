@@ -7,7 +7,7 @@
         <script src="script.js"></script>
     </head>
 
-    <body onload="init (); getComments(); isAuth); getBlobURL()">
+    <body onload="initFunctions()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" height="30" width="30" id="linkedin">
@@ -58,8 +58,7 @@
                     <input name="text-input" required>
                     <br/><br/>
                     <p>IMAGE UPLOAD</p>
-                    <input type="file" name="image">
-                    
+                    <input type="file" name="image" class="button smallDefaultButton">
                     <br/><br/>
                     <input type="submit" value="SUBMIT" class="button"/>
                     <br/><br/>

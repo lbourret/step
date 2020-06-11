@@ -65,7 +65,7 @@ public class NewCommentServlet extends HttpServlet {
     String username = getParameter(request, "username", null);
     String email = userService.getCurrentUser().getEmail();
     long timestamp = System.currentTimeMillis();
-    String image = getImageUploadURL(request);
+    String image = getBlobKey(request);
     
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);
@@ -77,14 +77,13 @@ public class NewCommentServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     // Redirect to contact page with default display params
-    response.sendRedirect("contact.html");
-
+    response.sendRedirect("/contact.html");
   }
 
    /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
-   */
+    * @return the request parameter, or the default value if the parameter
+    *         was not specified by the client
+    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
 
@@ -94,7 +93,11 @@ public class NewCommentServlet extends HttpServlet {
     return value;
   }
 
-    private String getImageUploadURL(HttpServletRequest request) {
+    /**
+     *
+     * @return url with blob key
+     */
+    private String getBlobKey(HttpServletRequest request) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

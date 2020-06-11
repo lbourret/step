@@ -82,17 +82,18 @@ public class ListCommentsServlet extends HttpServlet {
       String username = (String) entity.getProperty("username");
       String email = (String) entity.getProperty("email");
       String text = (String) entity.getProperty("text");
+      String image = (String) entity.getProperty("image");
       long timestamp = (long) entity.getProperty("timestamp");
 
       // Translate text
       text = translate(request, text);
 
-      Comment comment = new Comment(id, username, email, text, timestamp);
+      Comment comment = new Comment(id, username, email, text, image, timestamp);
       comments.add(comment);
     }
 
     response.setContentType("application/json;");
-    response.setCharacterEncoding("UTF-8"); // Allows characters
+    response.setCharacterEncoding("UTF-8"); 
     response.getWriter().println(gson.toJson(comments));
   }
 

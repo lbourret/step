@@ -39,6 +39,11 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 /** Servlet that creates a new comment */
 @WebServlet("/new-comment")
@@ -55,22 +60,25 @@ public class NewCommentServlet extends HttpServlet {
       return;
     }
 
-    // Get the input from form text box
+    // Get the input from comment form 
     String text = getParameter(request, "text-input", null);
     String username = getParameter(request, "username", null);
     String email = userService.getCurrentUser().getEmail();
     long timestamp = System.currentTimeMillis();
+    String image = getImageUploadURL(request);
     
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);
     commentEntity.setProperty("email", email);
     commentEntity.setProperty("text", text);
+    commentEntity.setProperty("image", image);
     commentEntity.setProperty("timestamp", timestamp);
 
     datastore.put(commentEntity);
 
     // Redirect to contact page with default display params
-    response.sendRedirect("contact.html?limit=5&sort=descending");
+    response.sendRedirect("contact.html");
+
   }
 
    /**
@@ -84,5 +92,27 @@ public class NewCommentServlet extends HttpServlet {
       return defaultValue;
     }
     return value;
+  }
+
+    private String getImageUploadURL(HttpServletRequest request) {
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("image");
+
+    // User submitted form without selecting a file, so we can't get a URL. (dev server)
+    if (blobKeys == null || blobKeys.isEmpty()) {
+        return null;
+    } else {
+      // Our form only contains a single file input, so get the first index.
+      BlobKey blobKey = blobKeys.get(0);
+      
+      // User submitted form without selecting a file, so we can't get a URL. (live server)
+      BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+      if (blobInfo.getSize() == 0) {
+        blobstoreService.delete(blobKey);
+        return null;
+      }
+      return ("/serve?blob-key=" + blobKey.getKeyString());
+    }
   }
 }

@@ -99,6 +99,10 @@ function createCommentElement(comment) {
   const textElement = document.createElement('p');
   textElement.innerText = comment.text;
 
+  // Image 
+  const imageElement = document.createElement('img');
+  imageElement.src = comment.image;
+
   // Delete Button
   const deleteButtonElement = document.createElement('button');
   deleteButtonElement.className = 'smallDefaultButton';
@@ -113,6 +117,7 @@ function createCommentElement(comment) {
   commentDetails.appendChild(dateElement);
   commentDetails.appendChild(nameElement);
   commentBody.appendChild(textElement);
+  commentBody.appendChild(imageElement);
   commentElement.appendChild(commentDetails);
   commentElement.appendChild(commentBody);
   commentElement.appendChild(deleteButtonElement);
@@ -164,9 +169,13 @@ async function deleteAllComments() {
 }
 
 function getBlobURL() {
-    fetch('/blobstore-upload-url').then(response => response.text())
-    .then((url) => {
-      document.getElementById("fileURL").innerText = url;
-    });
+    fetch("/upload-blobstore-url").then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        console.log(imageUploadUrl);
+        const messageForm = document.getElementById('submitForm');
+        messageForm.action = imageUploadUrl;
+      });
 
 }

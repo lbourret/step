@@ -45,12 +45,26 @@ public class FormHandlerServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    List<BlobKey> blobKeys = blobs.get("myFile");
+    List<BlobKey> blobKeys = blobs.get("image");
 
+    // User submitted form without selecting a file, so we can't get a URL. (dev server)
     if (blobKeys == null || blobKeys.isEmpty()) {
-      response.getWriter().println("Image Error");
+        System.out.println("hi");
+        return;
     } else {
-      response.getWriter().println("/serve?blob-key=" + blobKeys.get(0).getKeyString());
+
+      // Our form only contains a single file input, so get the first index.
+      BlobKey blobKey = blobKeys.get(0);
+      
+      // User submitted form without selecting a file, so we can't get a URL. (live server)
+      BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+      if (blobInfo.getSize() == 0) {
+        blobstoreService.delete(blobKey);
+        return;
+      }
+
+      System.out.println("blob");
+      response.getWriter().println("/serve?blob-key=" + blobKey.getKeyString());
     }
   }
 }

@@ -27,17 +27,15 @@ import javax.servlet.http.HttpServletResponse;
  * the URL that allows a user to upload a file to Blobstore. If this sounds confusing, try running a
  * dev server and navigating to /blobstore-upload-url to see the Blobstore URL.
  */
-@WebServlet("/blobstore-upload-url")
+@WebServlet("/upload-blobstore-url")
 public class BlobstoreServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String uploadUrl = blobstoreService.createUploadUrl("/form-handler");
+    String uploadUrl = blobstoreService.createUploadUrl("/new-comment");
 
-    System.out.println("url:" + uploadUrl);
     response.setContentType("text/html");
     response.getWriter().println(uploadUrl);
-    
   }
 }

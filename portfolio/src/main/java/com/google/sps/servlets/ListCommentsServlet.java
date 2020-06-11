@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import java.util.*;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +40,9 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 
 /** Servlet that returns comments */
 @WebServlet("/list-comments")
@@ -80,12 +84,16 @@ public class ListCommentsServlet extends HttpServlet {
       String text = (String) entity.getProperty("text");
       String image = (String) entity.getProperty("image");
       long timestamp = (long) entity.getProperty("timestamp");
+      
+      // Translate text
+      text = translate(request, text);
 
       Comment comment = new Comment(id, username, email, text, image, timestamp);
       comments.add(comment);
     }
 
-    response.setContentType("application/json; charset=utf-8");
+    response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8"); // Allows characters
     response.getWriter().println(gson.toJson(comments));
   }
 
@@ -118,5 +126,22 @@ public class ListCommentsServlet extends HttpServlet {
 
     Filter filter = new FilterPredicate(matchParam, FilterOperator.EQUAL, searchValue);
     return query.setFilter(filter);
+  }
+
+  /**
+   * Translate text
+   * @param text comment to translate
+   * @return translated text
+   */
+  private String translate(HttpServletRequest request, String text){
+    // Get the request language param with English default.
+    String languageCode = getParameter(request, "language", "en");
+
+    // Do the translation.
+    Translate translate = TranslateOptions.getDefaultInstance().getService();
+    Translation translation =
+        translate.translate(text, Translate.TranslateOption.targetLanguage(languageCode));
+    
+    return translation.getTranslatedText();
   }
 }

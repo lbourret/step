@@ -13,9 +13,9 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fun facts to Home page.
  */
-function addRandomGreeting() {
+function addRandomFact() {
   const facts =
       ['My favorite color is purple',  'I love french fries', 'I play soccer', 'My favorite ice cream flavor is coffee',
       'Connecticut born and raised', 'I have never watched Game of Thrones'];
@@ -99,6 +99,12 @@ function createCommentElement(comment) {
   const textElement = document.createElement('p');
   textElement.innerText = comment.text;
 
+  // Image 
+  imageElement = document.createElement('img');
+  if (comment.image){
+    imageElement.src = comment.image;
+  }
+
   // Delete Button
   const deleteButtonElement = document.createElement('button');
   deleteButtonElement.className = 'smallDefaultButton';
@@ -113,19 +119,24 @@ function createCommentElement(comment) {
   commentDetails.appendChild(dateElement);
   commentDetails.appendChild(nameElement);
   commentBody.appendChild(textElement);
+  commentBody.appendChild(imageElement);
   commentElement.appendChild(commentDetails);
   commentElement.appendChild(commentBody);
   commentElement.appendChild(deleteButtonElement);
+  commentElement.appendChild(imageElement);
 
   return commentElement;
 }
 
 /** Calls initParam on parameters for listComment. */
-function init(){
+function initFunctions(){
     initParam('limit'); 
     initParam('sort'); 
     initParam('searchName');
     initParam('language');
+    getComments(); 
+    isAuth(); 
+    getBlobURL();
 }
 
 /** Set limit's value to limit from URL. */
@@ -145,13 +156,13 @@ function getURLParam(paramName){
 }
 
 /** 
-    Tells the server to delete the comment.
-    @param comment specificied comment to delete
+*  Tells the server to delete the comment.
+*  @param comment specificied comment to delete
 */
 async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  await fetch('/delete-comment', {method: 'POST', body: params});;
+  await fetch('/delete-comment', {method: 'POST', body: params});
   getComments();
 }
 
@@ -161,4 +172,16 @@ async function deleteAllComments() {
   const comments = await response.text();
   console.log("# Comments Deleted: " + comments);
   getComments();
+}
+
+function getBlobURL() {
+    fetch("/upload-blobstore-url").then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        console.log(imageUploadUrl);
+        const messageForm = document.getElementById('submitForm');
+        messageForm.action = imageUploadUrl;
+      });
+
 }

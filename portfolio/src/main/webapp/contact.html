@@ -7,7 +7,7 @@
         <script src="script.js"></script>
     </head>
 
-    <body onload="init (); getComments(); isAuth()">
+    <body onload="initFunctions()">
         <div class="navi">
             <a href="https://www.linkedin.com/in/lian-bourret-b54060176/">
                 <img src="images/linkedin.png" height="30" width="30" id="linkedin">
@@ -31,7 +31,7 @@
                 <p>DISPLAY OPTIONS</p>
                 <label for="limit">COMMENT LIMIT</label>
                 <input type="number" id="limit" name="limit" value=5> 
-                <label for="sort">SORT BY:</label>
+                <label for="sort">SORT BY</label>
                 <select name="sort" id="sort" class="button smallDefaultButton">
                     <option value="descending">NEWEST</option>
                     <option value="ascending">OLDEST</option>
@@ -51,18 +51,21 @@
             </form>
 
             <div class="commentCol">
-                <form action="/new-comment" method="post" id="submitForm">
+                <form action="/new-comment" method="post" id="submitForm" enctype="multipart/form-data">
                     <p>NAME</p>
                     <input name="username" required>
                     <p>COMMENT</p>
                     <input name="text-input" required>
+                    <br/><br/>
+                    <p>IMAGE UPLOAD</p>
+                    <input type="file" name="image" class="button smallDefaultButton">
                     <br/><br/>
                     <input type="submit" value="SUBMIT" class="button"/>
                     <br/><br/>
                     <button onclick="deleteAllComments();return false;">DELETE ALL COMMENTS</button>
                 </form>
             </div>
-            
+                                
             <div class="commentCol">
                <div id="comment-container"></div>
            </div>

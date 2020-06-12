@@ -196,3 +196,8 @@ span.comment {
 #sort {
     margin: 0px;
 }
+
+.comment img {
+    width: 200px;
+    display: block;
+}

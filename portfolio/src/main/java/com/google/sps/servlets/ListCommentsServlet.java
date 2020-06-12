@@ -43,6 +43,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
+import com.google.api.client.http.HttpResponseException;
+import com.google.cloud.translate.TranslateException;
 
 /** Servlet that returns comments */
 @WebServlet("/list-comments")
@@ -82,17 +84,18 @@ public class ListCommentsServlet extends HttpServlet {
       String username = (String) entity.getProperty("username");
       String email = (String) entity.getProperty("email");
       String text = (String) entity.getProperty("text");
+      String image = (String) entity.getProperty("image");
       long timestamp = (long) entity.getProperty("timestamp");
-
+      
       // Translate text
       text = translate(request, text);
 
-      Comment comment = new Comment(id, username, email, text, timestamp);
+      Comment comment = new Comment(id, username, email, text, image, timestamp);
       comments.add(comment);
     }
 
     response.setContentType("application/json;");
-    response.setCharacterEncoding("UTF-8"); // Allows characters
+    response.setCharacterEncoding("UTF-8"); 
     response.getWriter().println(gson.toJson(comments));
   }
 
@@ -128,19 +131,22 @@ public class ListCommentsServlet extends HttpServlet {
   }
 
   /**
-   * Translate text
+   * Translates text
    * @param text comment to translate
    * @return translated text
    */
-  private String translate(HttpServletRequest request, String text){
+  private String translate(HttpServletRequest request, String text) {
     // Get the request language param with English default.
     String languageCode = getParameter(request, "language", "en");
 
-    // Do the translation.
-    Translate translate = TranslateOptions.getDefaultInstance().getService();
-    Translation translation =
-        translate.translate(text, Translate.TranslateOption.targetLanguage(languageCode));
-    
-    return translation.getTranslatedText();
+    String translatedText;
+    try {
+      Translate translate = TranslateOptions.getDefaultInstance().getService();
+      Translation translation = translate.translate(text, Translate.TranslateOption.targetLanguage(languageCode));
+      translatedText = translation.getTranslatedText();
+    } catch (TranslateException e) {
+      return text;
+    }
+    return translatedText;
   }
 }

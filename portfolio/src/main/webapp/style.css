@@ -201,3 +201,7 @@ span.comment {
     width: 200px;
     display: block;
 }
+
+input[type="file"] {
+    display: none;
+}

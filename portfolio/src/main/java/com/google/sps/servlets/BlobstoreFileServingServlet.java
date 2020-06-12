@@ -25,10 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Retrieves blob from request param's blob key
- * 
- */
+/** Retrieves blob from request param's blob key */
 @WebServlet("/serve")
 public class BlobstoreFileServingServlet extends HttpServlet {
 

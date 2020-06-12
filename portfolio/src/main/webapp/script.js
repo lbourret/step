@@ -119,6 +119,7 @@ function createCommentElement(comment) {
   commentDetails.appendChild(dateElement);
   commentDetails.appendChild(nameElement);
   commentBody.appendChild(textElement);
+  commentBody.appendChild(imageElement);
   commentElement.appendChild(commentDetails);
   commentElement.appendChild(commentBody);
   commentElement.appendChild(deleteButtonElement);
@@ -173,14 +174,14 @@ async function deleteAllComments() {
   getComments();
 }
 
-/** Get Blobstore URL */
 function getBlobURL() {
     fetch("/upload-blobstore-url").then((response) => {
         return response.text();
-    })
+      })
       .then((imageUploadUrl) => {
-        const submitForm = document.getElementById('submitForm');
-        submitForm.action = imageUploadUrl;
-     });
+        console.log(imageUploadUrl);
+        const messageForm = document.getElementById('submitForm');
+        messageForm.action = imageUploadUrl;
+      });
 
 }

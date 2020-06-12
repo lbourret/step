@@ -86,7 +86,7 @@ public class ListCommentsServlet extends HttpServlet {
       String text = (String) entity.getProperty("text");
       String image = (String) entity.getProperty("image");
       long timestamp = (long) entity.getProperty("timestamp");
-
+      
       // Translate text
       text = translate(request, text);
 

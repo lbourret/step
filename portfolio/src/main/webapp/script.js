@@ -32,8 +32,8 @@ function addRandomFact() {
  * Toggles visibility class
  */
 function toggleText(divID) {
-    var content = document.getElementById(divID);
-    content.classList.toggle('visible');
+  var content = document.getElementById(divID);
+  content.classList.toggle('visible');
 }
 
 /**
@@ -47,11 +47,12 @@ function getComments() {
 
   fetch('/list-comments?limit=' + limit + '&sort=' + sort + '&searchName=' + searchParam + '&language=' + language).then(response => response.json()).then((comments) => {
 
-      const commentListElement = document.getElementById('comment-container');
-      commentListElement.innerHTML = 'COMMENTS: ';
-      comments.forEach((comment) => {
-        commentListElement.appendChild(createCommentElement(comment));
-      })    
+    const commentListElement = document.getElementById('comment-container');
+    commentListElement.innerHTML = 'COMMENTS: ';
+
+    comments.forEach((comment) => {
+      commentListElement.appendChild(createCommentElement(comment));
+    })    
   });
 }
 
@@ -136,7 +137,7 @@ function initFunctions(){
     initParam('language');
     getComments(); 
     isAuth(); 
-    getBlobURL();
+    getBlobUrl();
 }
 
 /** Set limit's value to limit from URL. */
@@ -145,7 +146,7 @@ function initParam(paramName){
 
   // Only take URL param if not null
   if (limit){
-      document.getElementById(paramName).value = limit;
+    document.getElementById(paramName).value = limit;
   }
 }
 
@@ -156,9 +157,9 @@ function getURLParam(paramName){
 }
 
 /** 
-*  Tells the server to delete the comment.
-*  @param comment specificied comment to delete
-*/
+ *  Tells the server to delete the comment.
+ *  @param comment specificied comment to delete
+ */
 async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
@@ -174,14 +175,15 @@ async function deleteAllComments() {
   getComments();
 }
 
-function getBlobURL() {
-    fetch("/upload-blobstore-url").then((response) => {
-        return response.text();
-      })
-      .then((imageUploadUrl) => {
-        console.log(imageUploadUrl);
-        const messageForm = document.getElementById('submitForm');
-        messageForm.action = imageUploadUrl;
-      });
+/** Sets form to send data to Blobstore url. */
+function getBlobUrl() {
+  fetch("/upload-blobstore-url").then((response) => {
+    return response.text();
+  })
+  .then((imageUploadUrl) => {
+    console.log(imageUploadUrl);
+    const commentForm = document.getElementById('submitForm');
+    commentForm.action = imageUploadUrl;
+  });
 
 }

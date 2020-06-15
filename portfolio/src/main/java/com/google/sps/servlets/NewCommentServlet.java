@@ -80,10 +80,10 @@ public class NewCommentServlet extends HttpServlet {
     response.sendRedirect("/contact.html");
   }
 
-   /**
-    * @return the request parameter, or the default value if the parameter
-    *         was not specified by the client
-    */
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
 
@@ -93,11 +93,11 @@ public class NewCommentServlet extends HttpServlet {
     return value;
   }
 
-    /**
-     *
-     * @return url with blob key
-     */
-    private String getBlobKey(HttpServletRequest request) {
+  /**
+   * Gets blob key to access image
+   * @return url with blob key
+   */
+  private String getBlobKey(HttpServletRequest request) {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");

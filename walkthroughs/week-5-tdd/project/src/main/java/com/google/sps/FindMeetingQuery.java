@@ -24,7 +24,7 @@ public final class FindMeetingQuery {
     long duration = request.getDuration();
 
     // Meetings can't be longer than a day
-    if (duration > 24 * 60) {
+    if (duration > TimeRange.WHOLE_DAY.duration()) {
       return options;
     } else {
       options.add(TimeRange.WHOLE_DAY);
@@ -65,48 +65,50 @@ public final class FindMeetingQuery {
    * Block off all unavailable time
    */
   private ArrayList<TimeRange> unavailableTime(Collection<Event> allEvents, MeetingRequest request) {
-    ArrayList<TimeRange> attendeeEvents = attendeeEvents(allEvents, request);
-    return merge(attendeeEvents, request);
+    long duration = request.getDuration();
+    Collection<String> attendees = request.getAttendees();
+
+    ArrayList<TimeRange> blockedTimeRanges = findAttendeesBlockedTimeRanges(allEvents, attendees);
+    return mergeTimeRanges(blockedTimeRanges, duration);
   }
 
   /**
    * Merge all attendees' events
    */
-  private ArrayList<TimeRange> merge(ArrayList<TimeRange> events, MeetingRequest request) {
-    long duration = request.getDuration();
-    Collections.sort(events, TimeRange.ORDER_BY_START);
+  private ArrayList<TimeRange> mergeTimeRanges(ArrayList<TimeRange> blockedTime, long duration) {
+    Collections.sort(blockedTime, TimeRange.ORDER_BY_START);
 
-    for (int i = 0; i < events.size() - 1; i++) {
-      TimeRange current = events.get(i);
-      TimeRange next = events.get(i+1);
-      boolean nextEnd = (next.end() == TimeRange.END_OF_DAY);
+    for (int i = 0; i < blockedTime.size() - 1; i++) {
+      TimeRange current = blockedTime.get(i);
+      TimeRange next = blockedTime.get(i+1);
+      boolean nextEndOfDay = (next.end() == TimeRange.END_OF_DAY); // Meetings go to the end of the day should be inclusive of end time
 
       // Unable to schedule meeting between events
       if (current.overlaps(next)) {
         if ((next.end() >= current.end()) || (next.start() - current.start() < duration)) {
-          events.add(TimeRange.fromStartEnd(current.start(), next.end(), nextEnd));  
-          events.remove(current);  // replaced with merged block
+          blockedTime.add(TimeRange.fromStartEnd(current.start(), next.end(), nextEndOfDay));  
+          blockedTime.remove(current);  // replaced with merged block
         }
-        events.remove(next); // absorbed
+        blockedTime.remove(next); // absorbed
       }
     }
-    return events;
+    return blockedTime;
   }
 
   /**
-   * Return meeting request's attendees' events
+   * Return meeting request's attendees' blocked time ranges events
    */
-  private ArrayList<TimeRange> attendeeEvents(Collection<Event> allEvents, MeetingRequest request){
-    ArrayList<TimeRange> events = new ArrayList<TimeRange>();
+  private ArrayList<TimeRange> findAttendeesBlockedTimeRanges(Collection<Event> allEvents, Collection<String> attendees){
+    ArrayList<TimeRange> blockedTime = new ArrayList<TimeRange>();
 
     for (Event event : allEvents) {
-      for (String attendee : request.getAttendees()) {
+      for (String attendee : attendees) {
         if (event.getAttendees().contains(attendee)) {
-          events.add(event.getWhen());
+          blockedTime.add(event.getWhen());
           break; // prevent event repetition
         }
       }
     }
-    return events;
+    return blockedTime;
   }
 }

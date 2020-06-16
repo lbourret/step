@@ -21,6 +21,8 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<TimeRange> options = new ArrayList();
     ArrayList<TimeRange> unavailableBlocks = new ArrayList();
+    Collection<String> allAttendees = new ArrayList();
+    
     long duration = request.getDuration();
 
     // Meetings can't be longer than a day
@@ -29,10 +31,39 @@ public final class FindMeetingQuery {
     } else {
       options.add(TimeRange.WHOLE_DAY);
     }
-    
-    unavailableBlocks = unavailableTime(events, request);
 
-    for (TimeRange block : unavailableBlocks) {
+    ArrayList<TimeRange> allUnavailableBlocks;
+    allAttendees.addAll(request.getAttendees());
+    allAttendees.addAll(request.getOptionalAttendees());
+
+    Collection<String> optAttendees = request.getOptionalAttendees();
+    Collection<String> reqAttendees = request.getAttendees();
+    
+    // Do not need to check if optional attendees are compatible with meeting request
+    if (reqAttendees.size() == 0 || optAttendees.size() == 0){
+      allUnavailableBlocks = unavailableTime(events, allAttendees, duration);
+      findFreeTime(options, allUnavailableBlocks, duration);
+
+    } else {
+      ArrayList<TimeRange> reqUnavailableBlocks = unavailableTime(events, reqAttendees, duration);
+      allUnavailableBlocks = unavailableTime(events, allAttendees, duration);
+      
+      // Preserve options in case cannot accommodate additional opt attendees
+      ArrayList<TimeRange> optionsTemp = findFreeTime(new ArrayList<>(options), allUnavailableBlocks, duration);
+      if (optionsTemp.size() == 0) { // opt attendees not compatible, focus on req attendees
+        optionsTemp = findFreeTime(new ArrayList<>(options), reqUnavailableBlocks, duration);
+      }
+      options = optionsTemp;
+    }
+    return options;
+  }
+
+  /**
+   * Find all possible time ranges for meeting 
+   */
+  private ArrayList<TimeRange> findFreeTime(ArrayList<TimeRange> options, ArrayList<TimeRange> blockedTime, long duration) {
+
+    for (TimeRange block : blockedTime) {
       int busyStart = block.start();
       int busyEnd = block.end();
 
@@ -64,16 +95,13 @@ public final class FindMeetingQuery {
   /**
    * Block off all unavailable time
    */
-  private ArrayList<TimeRange> unavailableTime(Collection<Event> allEvents, MeetingRequest request) {
-    long duration = request.getDuration();
-    Collection<String> attendees = request.getAttendees();
-
+  private ArrayList<TimeRange> unavailableTime(Collection<Event> allEvents, Collection<String> attendees, long duration) {
     ArrayList<TimeRange> blockedTimeRanges = findAttendeesBlockedTimeRanges(allEvents, attendees);
     return mergeTimeRanges(blockedTimeRanges, duration);
   }
 
   /**
-   * Merge all attendees' events
+   * Merge attendees' busy blocks
    */
   private ArrayList<TimeRange> mergeTimeRanges(ArrayList<TimeRange> blockedTime, long duration) {
     Collections.sort(blockedTime, TimeRange.ORDER_BY_START);
@@ -96,7 +124,7 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Return meeting request's attendees' blocked time ranges events
+   * Return attendees' blocked time ranges events
    */
   private ArrayList<TimeRange> findAttendeesBlockedTimeRanges(Collection<Event> allEvents, Collection<String> attendees){
     ArrayList<TimeRange> blockedTime = new ArrayList<TimeRange>();

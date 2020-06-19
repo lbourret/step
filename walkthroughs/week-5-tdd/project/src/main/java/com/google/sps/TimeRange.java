@@ -37,7 +37,7 @@ public final class TimeRange {
   };
 
   /**
-   * A comparator for sorting ranges by their end time in ascending order.
+   * A comparator for sorting ranges by duration in ascending order.
    */
   public static final Comparator<TimeRange> ORDER_BY_END = new Comparator<TimeRange>() {
     @Override
